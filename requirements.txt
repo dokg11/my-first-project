@@ -4,5 +4,6 @@ koreanize_matplotlib
 streamlit-folium
 streamlit
 pandas
-pandas
 yfinance
+numpy
+matplotlib
