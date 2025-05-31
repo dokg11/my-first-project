@@ -4,11 +4,63 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
+import difflib
 
 st.set_page_config(page_title="기업 성장 예측기", layout="wide")
 st.title("📈 시가총액 & 주가 기반 기업 성장 예측기")
 
-ticker_input = st.text_input("🔍 종목 티커를 입력하세요 (예: AAPL, MSFT, TSLA, 삼성전자=005930.KS)", value="AAPL")
+# -----------------------------
+# 1. 회사명 → 티커 자동 매핑
+# -----------------------------
+# 수동 매핑 예시 (추후 확장 가능)
+manual_map = {
+    "삼성전자": "005930.KS",
+    "현대차": "005380.KS",
+    "LG에너지솔루션": "373220.KQ",
+    "카카오": "035720.KQ",
+    "네이버": "035420.KQ",
+    "SK하이닉스": "000660.KS",
+    "애플": "AAPL",
+    "마이크로소프트": "MSFT",
+    "테슬라": "TSLA",
+    "구글": "GOOGL",
+    "알파벳": "GOOGL",
+    "아마존": "AMZN",
+    "엔비디아": "NVDA",
+}
+
+# 주요 글로벌 기업 티커 리스트 (yfinance에서 검색 가능)
+top_tickers = [
+    "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "TSLA", "META", "BRK-B", "JPM", "V", "005930.KS",
+    "005380.KS", "000660.KS", "035720.KQ", "035420.KQ", "373220.KQ"
+]
+
+def company_name_to_ticker(name):
+    # 우선 수동 매핑 우선
+    if name in manual_map:
+        return manual_map[name]
+    
+    # yfinance에서 자동 검색
+    try:
+        search_result = yf.Ticker(name)
+        info = search_result.info
+        if 'symbol' in info and info['symbol']:
+            return info['symbol']
+    except:
+        pass
+
+    # 이름과 유사한 종목 추천
+    close_match = difflib.get_close_matches(name.upper(), top_tickers, n=1)
+    if close_match:
+        return close_match[0]
+    return None
+
+# -----------------------------
+# 2. 사용자 입력
+# -----------------------------
+company_input = st.text_input("🔍 분석할 기업명을 입력하세요 (예: 삼성전자, Apple, 테슬라 등)", value="삼성전자")
+
+ticker_input = company_name_to_ticker(company_input)
 
 if ticker_input:
     try:
@@ -23,7 +75,7 @@ if ticker_input:
         else:
             info = stock.info
             market_cap = info.get("marketCap", None)
-            company_name = info.get("shortName", ticker_input)
+            company_name = info.get("shortName", company_input)
 
             st.subheader(f"📊 {company_name} ({ticker_input}) 시가총액 및 주가 분석")
 
@@ -75,3 +127,5 @@ if ticker_input:
 
     except Exception as e:
         st.error(f"에러가 발생했습니다: {e}")
+else:
+    st.error("해당 기업명을 티커로 변환할 수 없습니다. 다른 이름이나 영어명을 시도해보세요.")
