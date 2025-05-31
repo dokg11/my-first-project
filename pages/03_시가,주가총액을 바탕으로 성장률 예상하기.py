@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
+import koreanize-matplotlib
 import difflib
 
 st.set_page_config(page_title="기업 성장 예측기", layout="wide")
