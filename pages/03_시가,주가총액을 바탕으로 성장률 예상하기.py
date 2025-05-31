@@ -129,3 +129,22 @@ if ticker_input:
         st.error(f"에러가 발생했습니다: {e}")
 else:
     st.error("해당 기업명을 티커로 변환할 수 없습니다. 다른 이름이나 영어명을 시도해보세요.")
+# ... (이전 코드 유지) ...
+
+if ticker_input:
+    try:
+        # 기존 데이터 불러오기 및 출력 ...
+
+        # 기업 정보 출력 후 공식 홈페이지 링크 추가
+        homepage_url = info.get('website', None)
+        if homepage_url:
+            st.markdown(f"🔗 [공식 홈페이지 바로가기]({homepage_url})")
+        else:
+            st.markdown("🔗 공식 홈페이지 정보를 찾을 수 없습니다.")
+
+        # 이후 기존 기술적 분석 및 추천문구 출력 ...
+
+    except Exception as e:
+        st.error(f"에러 발생: {e}")
+else:
+    st.error("해당 기업명을 티커로 변환할 수 없습니다. 다른 이름이나 영어명을 시도해보세요.")
