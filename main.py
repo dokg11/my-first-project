@@ -1,72 +1,77 @@
 import streamlit as st
 from datetime import datetime
 
-# 🎈 제목 & 설명
-st.markdown("<h1 style='text-align: center; color: #ff69b4;'>👕 오늘 뭐 입지? 컬러 & 날씨로 옷 추천받기 👗</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 18px;'>🎨 좋아하는 색을 선택하고, 오늘 날씨와 기온을 입력하면 스타일을 추천해드려요!</p>", unsafe_allow_html=True)
+# 🎀 타이틀
+st.markdown("<h1 style='text-align:center; color:#ff66cc;'>🧥 오늘의 패션 추천 총평 👚</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; font-size:18px;'>🎨 좋아하는 색 + 날씨 + 기온 = 완벽한 스타일 추천!</p>", unsafe_allow_html=True)
 st.markdown("---")
 
-# 📅 오늘 날짜 표시
+# 📅 날짜 표시
 today = datetime.now().strftime("%Y년 %m월 %d일")
-st.markdown(f"<p style='text-align:center; font-size:16px;'>📅 오늘은 <strong>{today}</strong> 입니다!</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:center;'>📅 오늘은 <strong>{today}</strong> 입니다.</p>", unsafe_allow_html=True)
 
-# 🌤️ 날씨 입력
-weather = st.selectbox("☁️ 오늘 날씨는 어떤가요?", ["맑음", "흐림", "비", "눈"])
-temperature = st.slider("🌡️ 현재 기온을 선택해주세요 (°C)", min_value=-10, max_value=40, value=20)
+# 🌤️ 날씨/온도 선택
+weather = st.selectbox("🌦️ 오늘 날씨는 어떤가요?", ["맑음", "흐림", "비", "눈"])
+temperature = st.slider("🌡️ 현재 기온은 몇 도인가요? (℃)", min_value=-10, max_value=40, value=18)
 
-st.markdown("---")
-
-# 🎨 색상 선택
+# 🎨 좋아하는 색
 color = st.radio(
-    "🎈 좋아하는 색을 골라보세요!",
+    "🎈 좋아하는 색깔을 골라주세요!",
     ["❤️ 빨강", "💙 파랑", "💛 노랑", "💚 초록", "🖤 검정", "🤍 하양", "💜 보라", "💕 분홍"],
     horizontal=True
 )
 
 st.markdown("---")
-st.subheader("👚 추천 스타일")
+st.subheader("💡 오늘의 패션 총평")
 
-# 🧠 추천 로직
-recommendation = ""
+# 🧠 총평 생성
+summary = ""
+
+# 1. 색 기반 문장
 if "빨강" in color:
-    recommendation += "🔥 열정적인 빨강 아이템 추천!\n- 빨간 후드티\n- 와인색 코트\n"
+    summary += "오늘은 강렬하고 에너지 넘치는 빨강을 좋아하시네요. "
 elif "파랑" in color:
-    recommendation += "💙 시원하고 깔끔한 블루 아이템!\n- 청자켓\n- 네이비 셔츠\n"
+    summary += "차분하고 시원한 느낌의 파랑을 선택하셨군요. "
 elif "노랑" in color:
-    recommendation += "🌞 발랄한 옐로우 스타일!\n- 머스타드 니트\n- 노란 맨투맨\n"
+    summary += "밝고 경쾌한 노랑은 기분을 업 시켜줘요. "
 elif "초록" in color:
-    recommendation += "🌿 자연스러운 그린 스타일!\n- 카키 야상\n- 민트 셔츠\n"
+    summary += "자연스럽고 편안한 초록은 오늘 잘 어울리는 색이에요. "
 elif "검정" in color:
-    recommendation += "🖤 시크한 블랙 아이템!\n- 블랙 재킷\n- 다크 팬츠\n"
+    summary += "모던하고 시크한 블랙으로 멋을 낼 수 있어요. "
 elif "하양" in color:
-    recommendation += "🤍 깔끔한 화이트 스타일!\n- 화이트 셔츠\n- 아이보리 니트\n"
+    summary += "깔끔하고 순수한 하양으로 심플한 멋을 더해보세요. "
 elif "보라" in color:
-    recommendation += "💜 감성적인 퍼플 룩!\n- 보라 니트\n- 라일락 블라우스\n"
+    summary += "감성적이고 신비로운 보라는 오늘 기분과 잘 어울려요. "
 elif "분홍" in color:
-    recommendation += "💕 사랑스러운 핑크룩!\n- 연핑크 후드\n- 로즈 티셔츠\n"
+    summary += "사랑스럽고 부드러운 핑크로 매력을 뽐내보세요. "
 
-# ☁️ 날씨에 따라 추가 제안
-if weather == "비":
-    recommendation += "🌧️ *비가 오니 우산과 방수 소재 아이템을 챙기세요!*\n"
-elif weather == "눈":
-    recommendation += "❄️ *눈이 오니 두꺼운 외투와 부츠가 좋아요!*\n"
+# 2. 날씨 기반 문장
+if weather == "맑음":
+    summary += "☀️ 맑은 날씨엔 가볍고 밝은 톤의 옷이 잘 어울립니다. "
 elif weather == "흐림":
-    recommendation += "🌥️ *흐린 날엔 차분한 톤으로 스타일링해보세요!*\n"
-elif weather == "맑음":
-    recommendation += "☀️ *햇빛이 좋아요! 산뜻한 색감이 잘 어울려요!*\n"
+    summary += "🌥️ 흐린 날에는 중간 톤이나 차분한 색상이 좋아요. "
+elif weather == "비":
+    summary += "🌧️ 비가 오니 방수 재질의 아우터와 어두운 톤이 유리해요. "
+elif weather == "눈":
+    summary += "❄️ 눈 오는 날엔 따뜻한 외투와 부츠가 필수예요. "
 
-# 🌡️ 온도에 따라 추가 제안
+# 3. 온도 기반 문장
 if temperature < 5:
-    recommendation += "🧥 *매우 추워요! 두꺼운 코트나 패딩이 필수예요.*"
+    summary += "기온이 많이 낮으니 두꺼운 패딩이나 코트를 추천드려요. "
 elif 5 <= temperature < 15:
-    recommendation += "🧣 *조금 쌀쌀해요! 얇은 니트나 겉옷을 챙기세요.*"
+    summary += "쌀쌀한 날씨엔 니트나 자켓이 좋습니다. "
 elif 15 <= temperature < 25:
-    recommendation += "👕 *선선한 날씨! 긴팔 셔츠나 가디건이 좋아요.*"
+    summary += "선선한 날씨엔 가벼운 가디건이나 긴팔 셔츠가 적당해요. "
 else:
-    recommendation += "🩳 *더운 날이에요! 반팔과 시원한 소재 옷을 입어보세요.*"
+    summary += "날씨가 더우니 반팔이나 시원한 소재의 옷을 추천해요. "
 
-# 💡 최종 출력
-st.markdown(f"<div style='background-color:#f9f9f9;padding:20px;border-radius:10px;'><pre style='font-size:16px'>{recommendation}</pre></div>", unsafe_allow_html=True)
+# ✅ 최종 출력
+st.markdown(
+    f"<div style='background-color:#f0f8ff; padding:20px; border-radius:10px;'>"
+    f"<p style='font-size:16px'>{summary}</p>"
+    f"</div>",
+    unsafe_allow_html=True
+)
 
 st.markdown("---")
-st.markdown("<p style='text-align:center;'>🎉 오늘도 멋지고 편안한 하루 보내세요!</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center;'>👗 오늘도 나만의 스타일로 자신 있게! 패션도 기분도 굿~ 🎉</p>", unsafe_allow_html=True)
