@@ -235,7 +235,7 @@ if not hist.empty:
     # 기존 출력 코드 유지...
 
     # 기술적 조건 분석 결과 띄우기
-    st.markdown("### 🧐 기술적 분석 6가지 조건 비교")
+    st.markdown("### 🧐 주식 떡상 지표 분석 6가지 조건 비교")
     tech_analysis_results = analyze_technical_conditions(hist.tail(60))  # 최근 60일 기준
     for line in tech_analysis_results:
         st.write(line)
